@@ -16,7 +16,7 @@ const Mutations = {
     // first take a copy of the updates
     const updates = { ...args };
     // delete the ID from the updates
-    delete updates.updates;
+    delete updates.id;
     // run the updates method
     return ctx.db.mutation.updateItem(
       {
@@ -27,6 +27,15 @@ const Mutations = {
       },
       info
     );
+  },
+  async deleteItem(parent, args, ctx, info) {
+    const where = { id: args.id };
+    // 1. first find the item
+    const item = await ctx.db.query.item({ where }, `{id title}`);
+    // 2. check if they own that item, or have the permissions
+    // TODO
+    // 3. delete it
+    return ctx.db.mutation.deleteItem({ where }, info);
   },
 };
 
